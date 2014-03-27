@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <!-- Refer to http://www.w3.org/Talks/Tools/Slidy2 -->
+    <title>Unit testing</title>
+    <link rel="stylesheet" type="text/css" media="screen, projection, print" href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+    <link rel="stylesheet" type="text/css" media="screen, projection, print" href="http://www.w3.org/Talks/Tools/Slidy2/styles/w3c-blue.css" / >
+    <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js.gz" charset="utf-8" type="text/javascript"></script>
+    <meta name="duration" content="10"/>
+    <meta name="font-size-adjustment" content="-2"/>
+  </head>
+  <body>
+    <div class="background">
+      <img id="head-icon" alt="graphic with four colored squares" src="http://www.w3.org/Talks/Tools/Slidy2/graphics/icon-blue.png" />
+    </div>
+    <div class="slide cover">
+      <div class="header">
+        <h1>Unit testing Gems</h1>
+      </div>
+    </div>
+    <div class="slide">
+      <h1>Who Are We : Chris Hansen, Nicolas Capdevila</h1>
+      <ul class="incremental">
+        <li>Chris Hansen
+          <ul class="incremental">
+            <li>factoid 1</li>
+            <li>factoid 2</li>
+            <li>factoid 3</li>
+            <li>factoid 4</li>
+          </ul>
+        </li>
+        <li>Nicolas Capdevila
+          <ul class="incremental">
+            <li>Tenure @ Overstock.com</li>
+            <li>Roles: Dev Lead, Software Developer, Principal Dev, Architect</li>
+            <li>Pair-programmed during all those projects, Created bob-the-builder eclipse plugin</li>
+            <li>Written many tests, some large financial project have over 80% code coverage</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="slide">
+      <h1>Agenda</h1>
+      <ul class="incremental">
+        <li>Realization</li>
+        <li>Guidelines</li>
+        <li>Unit tests smells</li>
+        <li>JUnit gems</li>
+        <li>Mockito gems</li>
+        <li>Hamcrest gems</li>
+        <li>Integration tests</li>
+        <li>Miscellanea</li>
+        <li>References</li>
+        <li>Q&A</li>
+      </ul>
+    </div>
+    <div class="slide">
+      <!-- Discuss overlap with UNIT TEST SMELLS slide -->
+      <h1>Realization</h1>
+      <ul class="incremental">
+        <li>Technical Challenges
+          <ul class="incremental">
+            <li>Designing unit tests is hard</li>
+            <li>There is an implicit repetition with somewhat small variations. Lends itself to code duplication/copy-paste</li>
+            <li>Cross boundaries (eg. mix persistence + business logic)</li>
+            <li>One simple production change causes a bunch of fixtures to fail in multiple test files.</li>
+          </ul>
+        </li>
+        <li>Cultural Challenges
+          <ul class="incremental">
+            <li>Perception of a burden. Tendency to leave it until later</li>
+            <li>2nd class citizen. It's not as important as production code</li>
+          </ul>
+        </li>
+        <li>Fallacies
+          <ul class="incremental">
+            <li>Fallacy of the Omnipotent QA. "Nah, QA will catch this" </li>
+            <li>Fallacy of the Tortoise and the Hare. "Unit testing slows me down"</li>
+            <li>Fallacy of perceived simplicity ie. "this class is simple, not writing a test now". Logic will eventually become complex</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="slide">
+      <h1>Guidelines</h1>
+      <ul class="incremental">
+        <li>Conform with the same standards than production code</li>
+        <li>Needs to be legible. Code is read many more times than is written. Leave good impression behind</li>
+        <li>Sharp focus. Before you start, ask yourself this simple question "What am I testing?"</li>
+        <li>Strive for 100% coverage and meaningful assertions</li>
+        <li>Self documenting tests</li>
+        <li>Need care and maintenance. Unit test code refactoring should follow a production code refactoring</li>
+        <li>Fast. Is slow test an integration test?</li>
+        <li>Design your test for extensibility</li>
+        <li>Experiment a little, without compromising the above. Use dynamic language</li>
+      </ul>
+    </div>
+    <div class="slide">
+      <h1>Unit test smells</h1>
+      <ul class="incremental">
+        <li>"Magic number syndrome". Ever found some numbers/values that appear out of nowhere and if you change them, things break?</li>
+        <li>Erratic Test (Sometimes passes, sometimes fails)</li>
+        <li>Fragile Test (Test doesn't compile or fails if SUT changed)</li>
+        <li>Frequent Debugging</li>
+        <li>Slow Tests</li>
+        <li>Obscure Test</li>
+        <li>Conditional Test Logic (replace with assertions, Test Utility Method, Parameterized test)</li>
+        <li>Hard to Test Code</li>
+        <li>Test Code Duplication (use Test Utility Method)</li>
+      </ul>
+    </div>
+    <div class="slide">
+      <!-- NIC -->
+      <h1>JUnit gems</h1>
+      <ul class="incremental">
+        <p>Code samples can be found TODO!! <a href=" https://scm.overstock.com/repos/WEB/webdev/scratch/ncapdevila/presentation_examples" target="_blank">here</a></p>
+        <li>@RunWith and BlockJUnit4ClassRunner
+          <p>instead of extending an overly complex BaseDbTestCase, BaseTestCase, ... </p>
+        </li>
+        <li>@Parameterized</li>
+        <li>@Rule and Timeout</li>
+        <li>@RunWith(Theories.class), @Theory, @Datapoints, Assume</li>
+      </ul>
+    </div>
+    <div class="slide">
+      <!-- NIC -->
+      <h1>Mockito Gems</h1>
+      <ul class="incremental">
+        <li><a href="http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html" target="_blank">This</a> is a-must-read</li>
+        <li>@Captor</li>
+        <li>@Spy</li>
+        <li>BDD: Given-When-Then</li>
+        <li>Answer</li>
+        <li>MockitoJUnitRunner</li>
+      </ul>
+    </div>
+    <div class="slide">
+      <!-- NIC -->
+      <h1>Integration tests</h1>
+      <ul class="incremental">
+        <li>Controversial topic</li>
+        <li>We are of the opinion that some level of integration tests should be done by Dev</li>
+        <li>The sooner a bug is caught the less expensive the project becomes</li>
+        <li>Separate unit test from integration tests. Place them in a different module</li>
+        <li> Tools
+          <ul class="incremental">
+            <li>Webservices: cargo maven plugin</li>
+            <li>Database: DbUnit</li>
+            <li>Business logic: FIT and fitnesse</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="slide">
+      <!-- NIC -->
+      <h1>Miscellanea</h1>
+      <ul class="incremental">
+        <li>Use code coverage tools in your IDE or maven plugins</li>
+        <li>Use pair-programming or code reviews</li>
+        <li>TDD</li>
+        <li>Register your build in Sonar!</li>
+        <li>Unit testing can give you quite a challenge</li>
+        <li>Multi-threading programming poses quite a challenge</li>
+        <li>Try to multi-thread your tests!</li>
+      </ul>
+    </div>
+    <div class="slide">
+      <h1>References</h1>
+      <ul>
+        <li><a href="http://www.junit.org/" target="_blank">JUnit by Kent Beck and Eric Gamma</a></li>
+        <li><a href="http://kentbeck.github.com/junit/javadoc/latest/" target="_blank">JUnit Javadoc</a></li>
+        <li><a href="http://code.google.com/p/mockito/" target="_blank">Mockito (widely adopted by Google)</a></li>
+        <li><a href="http://docs.mockito.googlecode.com/hg/latest/overview-summary.html" target="_blank">Mockito Javadoc</a></li>
+        <li><a href="http://fit.c2.com/" target="_blank">FIT by Ward Cunningham</a></li>
+        <li><a href="http://fitnesse.org/FitNesse" target="_blank">FITnesse (Uncle Bob)</a></li>
+        <li><a href="http://mojo.codehaus.org/fit-maven-plugin/" target="_blank">FIT maven plugin</a></li>
+        <li><a href="http://www.dbunit.org/" target="_blank">DbUnit</a></li>
+        <li><a href="http://scm.overstock.com/sonar/" target="_blank">TODO fix URL Sonar</a></li>
+        <li><a href="http://behaviour-driven.org/" target="_blank">BDD (Behavior Driven Development)</a></li>
+        <li><a href=" https://scm.overstock.com/repos/WEB/webdev/scratch/ncapdevila/presentation_examples" target="_blank">TODO Nic's Code Examples</a></li>
+
+        <!-- add code coverage tools, TDD links -->
+
+      </ul>
+    </div>
+    <div class="slide">
+      <h1>Thanks for your attention, Q & A </h1>
+      <ul>
+        <li><a href="http://www.w3.org/Talks/Tools/Slidy2/Overview.html" target="_blank">Slidy</a></li>
+      </ul>
+    </div>
+  </body>
+</html>
+
