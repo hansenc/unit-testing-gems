@@ -1,4 +1,4 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
 import static org.mockito.Mockito.mock;
 

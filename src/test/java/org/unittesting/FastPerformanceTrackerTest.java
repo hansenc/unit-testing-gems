@@ -1,22 +1,20 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
-import static com.overstock.unittesting.TrainingEffort.HIGH;
-import static com.overstock.unittesting.TrainingEffort.IRONMAN;
-import static com.overstock.unittesting.TrainingEffort.MEDIUM;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
+import static org.unittesting.TrainingEffort.HIGH;
+import static org.unittesting.TrainingEffort.IRONMAN;
+import static org.unittesting.TrainingEffort.MEDIUM;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -26,6 +24,7 @@ import org.mockito.MockitoAnnotations;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+@Ignore
 public class FastPerformanceTrackerTest
 {
 

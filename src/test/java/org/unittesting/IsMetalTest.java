@@ -1,10 +1,10 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
-import static com.overstock.unittesting.TrainingEffort.HIGH;
-import static com.overstock.unittesting.TrainingEffort.IRONMAN;
-import static com.overstock.unittesting.TrainingEffort.MEDIUM;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
+import static org.unittesting.TrainingEffort.HIGH;
+import static org.unittesting.TrainingEffort.IRONMAN;
+import static org.unittesting.TrainingEffort.MEDIUM;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
 import org.apache.log4j.Logger;
 import org.junit.runner.notification.RunNotifier;

@@ -1,14 +1,14 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
-import static com.overstock.unittesting.TrainingEffort.HIGH;
-import static com.overstock.unittesting.TrainingEffort.IRONMAN;
-import static com.overstock.unittesting.TrainingEffort.MEDIUM;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.unittesting.TrainingEffort.HIGH;
+import static org.unittesting.TrainingEffort.IRONMAN;
+import static org.unittesting.TrainingEffort.MEDIUM;
 
 import java.net.URI;
 import java.util.Collection;

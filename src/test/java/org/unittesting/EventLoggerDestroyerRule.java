@@ -1,4 +1,4 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;

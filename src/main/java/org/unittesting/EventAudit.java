@@ -1,9 +1,11 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
 import java.util.Collection;
 import java.util.Date;
+
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
+
 import com.google.common.base.Preconditions;
 
 @AutoProperty

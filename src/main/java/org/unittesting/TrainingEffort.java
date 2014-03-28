@@ -1,4 +1,4 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
 public enum TrainingEffort {
   IRONMAN,

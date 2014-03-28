@@ -2,3 +2,4 @@ whateverFolder
 .classpath
 .project
 .settings
+/target

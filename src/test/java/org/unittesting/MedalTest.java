@@ -1,10 +1,10 @@
-package com.overstock.unittesting;
+package org.unittesting;
 
-import static com.overstock.unittesting.Medal.BRONZE;
-import static com.overstock.unittesting.Medal.GOLD;
-import static com.overstock.unittesting.Medal.NONE_TRY_AGAIN_NEXT_TIME;
-import static com.overstock.unittesting.Medal.SILVER;
 import static org.junit.Assert.assertEquals;
+import static org.unittesting.Medal.BRONZE;
+import static org.unittesting.Medal.GOLD;
+import static org.unittesting.Medal.NONE_TRY_AGAIN_NEXT_TIME;
+import static org.unittesting.Medal.SILVER;
 
 import org.junit.Test;
 
