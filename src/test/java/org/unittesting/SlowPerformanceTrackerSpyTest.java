@@ -34,7 +34,7 @@ public class SlowPerformanceTrackerSpyTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    underTest = new PerformanceTracker.SlowImpl(medalFetcher, eventLogger, mapper);
+    underTest = new SlowImpl(medalFetcher, eventLogger, mapper);
     //SPY
     underTest = spy(underTest);
   }

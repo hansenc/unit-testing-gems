@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -23,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class FastPerformanceTracker_V2_Test
 {
@@ -47,6 +45,16 @@ public class FastPerformanceTracker_V2_Test
 
     private CountDownLatch countDownLatch;
 
+    @Mock
+    private SlowImpl slowImpl;
+    
+    @Mock
+    private TrackRequest singleTrackRequest;
+    
+    
+    @Mock
+    private Event expectedEvent;
+    
     @Before
     public void setUp()
     {
@@ -99,7 +107,7 @@ public class FastPerformanceTracker_V2_Test
         Collection<TrackRequest> requestCollection = createRequestCollection(size);
         countDownLatch = new CountDownLatch(200);
         instrumentedEventLogger = new InstrumentedEventLogger(countDownLatch, eventLogger);
-        underTest = new PerformanceTracker.FastImpl(medalFetcher, instrumentedEventLogger, mapper);
+        underTest = new FastImpl(medalFetcher, instrumentedEventLogger, mapper);
         // WHEN
         Collection<Event> actual = underTest.track(requestCollection);
         countDownLatch.await();
@@ -109,6 +117,17 @@ public class FastPerformanceTracker_V2_Test
         verify(eventLogger, times(size)).save(any(EventAudit.class));
     }
 
+    @Test
+    public void testSlow() {
+        //GIVEN
+        when(slowImpl.track(singleTrackRequest)).thenReturn(expectedEvent);
+        //WHEN
+        underTest = new FastImpl(slowImpl, medalFetcher, instrumentedEventLogger, mapper);
+        Event actualEvent = underTest.track(singleTrackRequest);
+        //THEN
+        assertEquals(expectedEvent, actualEvent);
+    }
+    
     private Collection<TrackRequest> createRequestCollection(int size) throws URISyntaxException
     {
         TrainingEffort me = MEDIUM;

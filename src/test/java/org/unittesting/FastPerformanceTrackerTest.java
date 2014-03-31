@@ -46,7 +46,7 @@ public class FastPerformanceTrackerTest
     public void setUp()
     {
         MockitoAnnotations.initMocks(this);
-        underTest = new PerformanceTracker.FastImpl(medalFetcher, eventLogger, mapper);
+        underTest = new FastImpl(medalFetcher, eventLogger, mapper);
     }
 
     @Test
