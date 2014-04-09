@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Unit Testing Gems</title>
+
+		<meta name="description" content="A presentation about how to effectively leverage junit, mockito, assertj">
+		<meta name="author" content="Chris Hansen">
+		<meta name="author" content="Nicolas Capdevila">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+				<section>
+					<h1>Unit Testing Gems</h1>
+					<h3>About junit, mockito, assertj and more... much more</h3>
+					<p>
+						<small>Chris Hansen, Nicolas Capdevila</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Chris Hansen</h2>
+                    <ul>
+                      <li>factoid 1</li>
+                      <li>factoid 2</li>
+                      <li>factoid 3</li>
+                      <li>factoid 4</li>
+                    </ul>
+				</section>
+
+				<section>
+					<h2>Nicolas Capdevila</h2>
+                    <ul>
+                      <li>Roles: Dev Lead, Software Developer, Principal Dev, Architect</li>
+                      <li>Pair-programmed during all those projects, Created bob-the-builder eclipse plugin</li>
+                      <li>Written many tests, some large financial project have over 80% code coverage</li>
+                    </ul>
+				</section>
+
+                <section>
+                    <h2>Agenda</h2>
+                    <ul>
+                      <li>Realization</li>
+                      <li>Guidelines</li>
+                      <li>Unit tests smells</li>
+                      <li>JUnit gems</li>
+                      <li>Mockito gems</li>
+                      <li>AssertJ gems</li>
+                      <li>Miscellanea</li>
+                      <li>References</li>
+                      <li>Q&A</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Realization</h2>
+                    <ul>
+                      <li>Technical Challenges
+                        <ul>
+                          <li class="fragment">Designing unit tests is hard</li>
+                          <li class="fragment">There is an implicit repetition with somewhat small variations. Lends itself to code duplication/copy-paste</li>
+                          <li class="fragment">Cross boundaries (eg. mix persistence + business logic)</li>
+                          <li class="fragment">One simple production change causes a bunch of fixtures to fail in multiple test files.</li>
+                        </ul>
+                      </li>
+                      <li>Cultural Challenges
+                        <ul>
+                          <li class="fragment">Perception of a burden. Tendency to leave it until later</li>
+                          <li class="fragment">2nd class citizen. It's not as important as production code</li>
+                        </ul>
+                      </li>
+                      <li>Fallacies
+                        <ul>
+                          <li class="fragment">Fallacy of the Omnipotent QA. "Nah, QA will catch this" </li>
+                          <li class="fragment">Fallacy of the Tortoise and the Hare. "Unit testing slows me down"</li>
+                          <li class="fragment">Fallacy of perceived simplicity ie. "this class is simple, not writing a test now". Logic will eventually become complex</li>
+                        </ul>
+                      </li>
+                    </ul>
+                </section>
+                <section>
+                      <h2>Guidelines</h2>
+                      <ul>
+                        <li class="fragment">Conform with the same standards than production code</li>
+                        <li class="fragment">Needs to be legible. Code is read many more times than is written. Leave good impression behind</li>
+                        <li class="fragment">Sharp focus. Before you start, ask yourself this simple question "What am I testing?"</li>
+                        <li class="fragment">Strive for 100% coverage and meaningful assertions</li>
+                        <li class="fragment">Self documenting tests</li>
+                        <li class="fragment">Need care and maintenance. Unit test code refactoring should follow a production code refactoring</li>
+                        <li class="fragment">Fast. Is slow test an integration test?</li>
+                        <li class="fragment">Design your test for extensibility</li>
+                        <li class="fragment">Experiment a little, without compromising the above. Use dynamic language</li>
+                      </ul>
+                </section>
+                <section>
+                      <h2>Unit test smells</h2>
+                      <ul>
+                        <li class="fragment">"Magic number syndrome". Ever found some numbers/values that appear out of nowhere and if you change them, things break?</li>
+                        <li class="fragment">Erratic Test (Sometimes passes, sometimes fails)</li>
+                        <li class="fragment">Frequent Debugging</li>
+                        <li class="fragment">Slow Tests</li>
+                        <li class="fragment">Obscure Test</li>
+                        <li class="fragment">Conditional Test Logic</li>
+                        <li class="fragment">Test Code Duplication</li>
+                      </ul>
+                </section>
+                <section>
+                  <h2>JUnit gems</h2>
+                  <ul>
+                    <li>@RunWith and BlockJUnit4ClassRunner</li>
+                    <li>@Parameterized</li>
+                    <li>@Rule and Timeout</li>
+                    <li>@RunWith(Theories.class), @Theory, @Datapoints, Assume</li>
+                  </ul>
+                </section>
+                <section>
+                   <h2>@RunWith and BlockJUnit4ClassRunner</h2>
+                      <p>Use it for <strong>static-i</strong> stuff</p>
+                      <p>instead of extending an overly complex BaseDbTestCase, BaseTestCase, ... </p>
+                      <p>eg. CustomOlimpicTestRunner</p>
+                      <pre><code data-trim>
+public class CustomOlimpicTestRunner extends BlockJUnit4ClassRunner {
+
+  Logger LOGGER = Logger.getLogger(CustomOlimpicTestRunner.class);
+
+  public CustomOlimpicTestRunner(Class<?> klass) throws InitializationError {
+    super(klass);
+  }
+
+  @Override
+  protected void runChild(FrameworkMethod method, RunNotifier notifier) {
+    LOGGER.debug("About to run " + method.getName());
+    super.runChild(method, notifier);
+    LOGGER.debug("After running " + method.getName());
+  }
+
+  @Override
+  protected Statement withBeforeClasses(Statement statement) {
+    initializeConfig();
+    initializeDb();
+    return super.withBeforeClasses(statement);
+  }
+
+  @Override
+  protected Statement withAfterClasses(Statement statement) {
+    return super.withAfterClasses(statement);
+  }
+
+  private void initializeConfig() {
+    // TODO Auto-generated method stub
+
+  }
+
+  private void initializeDb() {
+    // TODO Auto-generated method stub
+
+  }
+}
+
+					</code></pre>
+                </section>
+                <section>
+                  <h2>@Parameterized</h2>
+                  <p><strong>STOP</strong> repeating</p>
+                  <p>1st draft: OlimpicsBusinessLogicTest</p>
+                  <p>Improved: OlimpicsBusinessLogicImprovedTest</p>
+                  <p>Better: ParameterizedOlimpicsBusinessLogicTest</p>
+                      <pre><code data-trim>
+  @Test
+  public void testWinGoldTightRace() {
+    // GIVEN
+    TrainingEffort me = HIGH;
+    TrainingEffort[] competitors = new TrainingEffort[] { HIGH, HIGH, HIGH };
+    // WHEN
+    Medal actual = logic.win(me, competitors);
+    // THEN
+    Medal expected = GOLD;
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testWinSilverTightRace() {
+    // GIVEN
+    TrainingEffort me = HIGH;
+    TrainingEffort[] competitors = new TrainingEffort[] { HIGH, HIGH, IRONMAN };
+    // WHEN
+    Medal actual = logic.win(me, competitors);
+    // THEN
+    Medal expected = SILVER;
+    assertEquals(expected, actual);
+  }
+/* STOP repeating yourself */
+
+  @Test
+  public void test() {
+    testIt(HIGH, new TrainingEffort[] { COUCH_POTATO, MEDIUM, MEH }, GOLD);
+    testIt(HIGH, new TrainingEffort[] { HIGH, HIGH, HIGH }, GOLD);
+    testIt(HIGH, new TrainingEffort[] { HIGH, HIGH, IRONMAN }, SILVER);
+    testIt(MEDIUM, new TrainingEffort[] { HIGH, HIGH, MEH }, BRONZE);
+    testIt(MEDIUM, new TrainingEffort[] { IRONMAN, HIGH, IRONMAN }, NONE_TRY_AGAIN_NEXT_TIME);
+  }
+
+  private void testIt(TrainingEffort me, TrainingEffort[] competitors, Medal expected) {
+    // WHEN
+    Medal actual = logic.win(me, competitors);
+    // THEN
+    assertEquals(expected, actual);
+  }
+
+/* Can we do better? */
+    @Parameters
+    public static Collection&lt;Object[]&gt; data()
+    {
+        Object[][] data = new Object[][] {
+                  { HIGH,   new Object[] { COUCH_POTATO, MEDIUM, MEH },   GOLD }
+                , { HIGH,   new Object[] { HIGH, HIGH, HIGH },            GOLD }
+                , { HIGH,   new Object[] { HIGH, HIGH, IRONMAN },       SILVER }
+                , { MEDIUM, new Object[] { HIGH, HIGH, MEH },           BRONZE }
+                , { MEDIUM, new Object[] { IRONMAN, HIGH, IRONMAN },    NONE_TRY_AGAIN_NEXT_TIME }
+        };
+        return Arrays.asList(data);
+    }
+
+    @Test
+    public void test()
+    {
+        // WHEN
+        Medal actual = logic.win(me, competitors);
+        // THEN
+        assertEquals(expected, actual);
+    }
+
+    public ParameterizedOlimpicsBusinessLogicTest(
+            Object me, Object[] competitors, Object expected)
+    {
+        this.me = TrainingEffort.valueOf((String) me);
+        this.competitors = competitors(competitors);
+        this.expected = Medal.valueOf((String) expected);
+    }
+					</code></pre>
+                </section>
+                <section>
+                    <h2>@Rule and Timeout</h2>
+                    <p><strong>Empower</strong> your test: take action when your test fails or pass or runs. eg. create reports, alerts</p>
+                    <p>Example: EventLoggerTest</p>
+                    <pre><code data-trim>
+  @Rule
+  public ReportCreator reportCreator = new ReportCreator();
+  
+  @Rule
+  public EventLoggerDestroyerRule rule = new EventLoggerDestroyerRule();
+
+  @Rule
+  public ReportWriter writer = new ReportWriter(this, reportCreator.getFile());
+  
+  @Before
+  public void setUp() {
+    eventLogger = new EventLogger.Impl();
+  }
+
+  @Test(timeout = 150)
+  public void testSave() throws Exception {
+    Event event = new Event.Builder()
+        .withCompetitionEvent(new CompetitionEvent(123, new URI("http://xterra.com")))
+        .withCompetitors(Lists.newArrayList(
+          TrainingEffort.IRONMAN,
+          TrainingEffort.MEDIUM,
+          TrainingEffort.HIGH,
+          TrainingEffort.COUCH_POTATO))
+        .withDate(new Date())
+        .withMedal(Medal.SILVER)
+        .withMyCondition(TrainingEffort.HIGH)
+        .build();
+    rule.setEvent(event);
+    eventLogger.save(event);
+  }
+					</code></pre>
+                </section>
+                <section>
+                    <h2>@RunWith(Theories.class), @Theory, @Datapoints, Assume</h2>
+                    <p>Let junit do the typing</p>
+                    <pre><code data-trim>
+@RunWith(Theories.class)
+public class IsMetalTest {
+
+  private OlimpicsBusinessLogic.Impl logic;
+
+  @Before
+  public void setUp() {
+    logic = new OlimpicsBusinessLogic.Impl();
+  }
+
+  @DataPoints
+  public static TrainingEffort[] me = new TrainingEffort[] { IRONMAN, HIGH, MEDIUM };
+
+  @DataPoints
+  public static TrainingEffort[][] competitionICanBeat = new TrainingEffort[][] {
+     { HIGH, HIGH, HIGH, HIGH } 
+    ,{ MEDIUM, HIGH, IRONMAN } 
+    ,{ IRONMAN, HIGH, IRONMAN } 
+    ,{ MEDIUM, HIGH, IRONMAN } 
+  };
+
+  @Theory
+  public void testMetal(TrainingEffort me, TrainingEffort[] competitionICanBeat) {
+    assumeTrue(me != MEDIUM);
+    Medal actual = logic.win(me, competitionICanBeat);
+    assertTrue(actual.isMetal());
+  }
+					</code></pre>
+                </section>
+                <section>
+                  <h1>Mockito Gems</h1>
+                  <ul>
+                    <li><a href="http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html" target="_blank">This</a> is a-must-read</li>
+                    <li>@Captor</li>
+                    <li>@Spy</li>
+                    <li>BDD: Given-When-Then</li>
+                    <li>Answer</li>
+                    <li>MockitoJUnitRunner</li>
+                  </ul>
+                </section>
+                <section>
+                  <h2>@Captor</h2>
+                  <p>Inspect <strong>side effects</strong>, eg. PerformanceTrackerTest</p>
+					<pre><code data-trim>
+  public Event track(TrackRequest trackRequest)
+  {
+      // NETWORK CALL
+      Medal medal = medalFetcher.getMedal(trackRequest.getCompetitionEvent());
+      Event event = new Event.Builder()
+              .withCompetitionEvent(trackRequest.getCompetitionEvent())
+              .withCompetitors(trackRequest.getCompetitors())
+              .withDate(new Date())
+              .withMedal(medal)
+              .withMyCondition(trackRequest.getMe())
+              .build();
+      EventAudit eventAudit = mapper.map(event);
+      // NETWORK CALLS
+      eventLogger.save(event);
+      eventLogger.save(eventAudit);
+      return event;
+  }
+...
+  @Captor
+  private ArgumentCaptor&lt;Event&gt; eventCaptor;
+...
+  @Test
+  public void testBDD() throws Exception {
+    TrainingEffort me = MEDIUM;
+    Collection&lt;TrainingEffort&gt; competitors = mock(Collection.class);
+    CompetitionEvent competitionEvent = mock(CompetitionEvent.class);
+    Medal medal = Medal.BRONZE;
+    EventAudit eventAudit = mock(EventAudit.class);
+    // GIVEN
+    given(medalFetcher.getMedal(competitionEvent)).willReturn(medal);
+    given(mapper.map(any(Event.class))).willReturn(eventAudit);
+    TrackRequest request = new TrackRequest.Builder()
+        .withCompetitionEvent(competitionEvent)
+        .withCompetitors(competitors)
+        .withMe(me)
+        .build();
+    // WHEN
+    Event actual = underTest.track(request);
+    // THEN
+    verify(eventLogger).save(eventCaptor.capture());
+    Event actualEvent = eventCaptor.getValue();
+    assertEquals(medal, actualEvent.getMedal());
+    assertEquals(me, actual.getMyCondition());
+    assertEquals(competitionEvent, actual.getCompetitionEvent());
+    assertEquals(competitors, actual.getCompetitors());
+    assertEquals(medal, actual.getMedal());
+  }
+...
+					</code></pre>
+                </section>
+                <section>
+                  <h2>Answer</h2>
+                  <p><strong>Introspect on the method</strong> calls of your mocks. eg. MapperTest</p>
+					<pre><code data-trim>
+  public EventAudit map(Event event) {
+    return new EventAudit.Builder()
+        .withCompetitionEvent(event.getCompetitionEvent())
+        .withCompetitors(event.getCompetitors())
+        .withDate(event.getDate())
+        .withMedal(event.getMedal())
+        .withMyCondition(event.getMyCondition())
+        .build();
+  }
+
+
+  @Test
+  public void testAllEventMethodsInvokedInMapper() throws Exception {
+    EventAnswer answer = new EventAnswer();
+    Event mock = Mockito.mock(Event.class, answer);
+    try {
+      mapper.map(mock);
+    }
+    catch (Exception e) {
+      //We don't care about any exceptions thrown from builder, just that buildLineItem invokes all getters 
+    }
+    finally {
+      assertFalse("Missing getter invocation: " + answer.getMissingGetInvocations(), answer.isMissingGetInvocations());
+    }
+  }
+
+
+public class EventAnswer implements Answer&lt;Event&gt;{
+...
+  @Override
+  public Event answer(InvocationOnMock invocation) throws Throwable {
+    Method method = invocation.getMethod();
+    if (method.getName().startsWith(GETTER_PREFIX)|| method.getName().startsWith(IS_PREFIX)) {
+      invokedGetters.add(method.getName());
+    }
+    return null /*don't care about returning anything, just that all getters are invoked*/;
+  }
+...
+  public boolean isMissingGetInvocations() {
+    return !getMissingGetInvocations().isEmpty();
+  }
+...
+}
+					</code></pre>
+                </section>
+
+                <section>
+                   <h2>@Spy</h2>
+                   <p>Mock parts of your unit under test. Use with caution. eg. SlowPerformanceTrackerSpyTest</p>
+					<pre><code data-trim>
+public interface PerformanceTracker
+{
+    Event track(TrackRequest trackRequest);
+
+    Collection<Event> track(Collection<TrackRequest> trackRequests);
+}
+...
+    @Override
+    public Collection&lt;Event&gt; track(Collection&lt;TrackRequest&gt; trackRequests)
+    {
+        ImmutableList.Builder&lt;Event&gt; listBuilder = new ImmutableList.Builder&lt;Event&gt;();
+        for(TrackRequest each : trackRequests)
+        {
+            Event event = track(each);
+            listBuilder.add(event);
+        }
+        return listBuilder.build();
+    }
+...
+  @Before
+  public void setUp() {
+    MockitoAnnotations.initMocks(this);
+    underTest = new SlowImpl(medalFetcher, eventLogger, mapper);
+    //SPY
+    underTest = spy(underTest);
+  }
+...
+  @Test
+  public void testWithSpy() {
+    // GIVEN
+    TrackRequest request3 = mock(TrackRequest.class);
+    TrackRequest request2 = mock(TrackRequest.class);
+    TrackRequest request1 = mock(TrackRequest.class);
+    Event event1 = mock(Event.class);
+    Event event2 = mock(Event.class);
+    Event event3 = mock(Event.class);
+    Collection&lt;TrackRequest&gt; requests = Lists.newArrayList(request1, request2, request3);
+    doReturn(event1).when(underTest).track(request1);
+    doReturn(event2).when(underTest).track(request2);
+    doReturn(event3).when(underTest).track(request3);
+    // WHEN
+    Collection&lt;Event&gt; actual = underTest.track(requests);
+    // THEN
+    assertEquals(3, actual.size());
+    assertTrue(actual.contains(event1));
+    assertTrue(actual.contains(event2));
+    assertTrue(actual.contains(event3));
+  }
+
+					</code></pre>
+                </section>
+                <section>
+                  <h2>MockitoJUnitRunner</h2>
+                  <p>You decide!</p>
+					<pre><code data-trim>
+ @RunWith(MockitoJUnitRunner.class)
+ public class ExampleTest {
+ 
+     @Mock
+     private List list;
+ 
+     @Test
+     public void shouldDoSomething() {
+         list.add(100);
+     }
+ }
+					</code></pre>
+                </section>
+
+                <section>
+                  <h2>Miscellanea</h2>
+                  <ul>
+                    <li class="fragment">Use code coverage tools in your IDE or maven plugins</li>
+                    <li class="fragment">Use pair-programming or code reviews</li>
+                    <li class="fragment">TDD</li>
+                    <li class="fragment">Register your build in Sonar!</li>
+                    <li class="fragment">Unit testing can give you quite a challenge</li>
+                    <li class="fragment">Multi-threading programming poses quite a challenge</li>
+                    <li class="fragment">Try to multi-thread your tests!</li>
+                  </ul>
+                </section>
+
+                <section>
+                  <h1>References</h1>
+                  <ul>
+                    <li><a href="http://www.junit.org/" target="_blank">JUnit by Kent Beck and Eric Gamma</a></li>
+                    <li><a href="http://kentbeck.github.com/junit/javadoc/latest/" target="_blank">JUnit Javadoc</a></li>
+                    <li><a href="http://code.google.com/p/mockito/" target="_blank">Mockito (widely adopted by Google)</a></li>
+                    <li><a href="http://docs.mockito.googlecode.com/hg/latest/overview-summary.html" target="_blank">Mockito Javadoc</a></li>
+                    <li><a href="http://behaviour-driven.org/" target="_blank">BDD (Behavior Driven Development)</a></li>
+                    <li><a href="https://github.com/ncapdevila/unit-testing-gems" target="_blank">Code Samples</a></li>
+
+                    <!-- add code coverage tools, TDD links -->
+
+                  </ul>
+                </section>
+                <section>
+                  <h1>Thanks for your attention, Q & A </h1>
+                  <ul>
+                    <li><a href="https://github.com/hakimel/reveal.js" target="_blank">reveal.js</a></li>
+                  </ul>
+                </section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
