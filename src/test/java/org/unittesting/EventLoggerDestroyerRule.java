@@ -18,7 +18,7 @@ public class EventLoggerDestroyerRule implements TestRule {
     this.event = event;
   }
 
-//  @Override
+  @Override
   public Statement apply(final Statement base, final Description description) {
     return new Statement() {
       public void evaluate() throws Throwable {

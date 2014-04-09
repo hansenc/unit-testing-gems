@@ -30,7 +30,7 @@ public class EventAnswer implements Answer<Event>{
     this.getters = ImmutableSet.copyOf(getters);
   }
   
-//  @Override
+  @Override
   public Event answer(InvocationOnMock invocation) throws Throwable {
     System.out.println("invoked: " + invocation.getMethod().getName());
     Method method = invocation.getMethod();
