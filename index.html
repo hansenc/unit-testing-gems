@@ -29,6 +29,17 @@
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
+
+        <style>
+            .assertion-error {
+                border: 1px solid;
+                margin: 10px 0px;
+                padding:15px 10px;
+                background-repeat: no-repeat;
+                background-position: 10px center;
+                color: #D8000C; /* red */
+            }
+        </style>
 	</head>
 
 	<body>
@@ -589,7 +600,7 @@ public class ExampleTest {
 Set&lt;Product&gt; products = Sets.newHashSet(wallet, monitor);
 assertThat(products, hasSize(1));
                     </code></pre>
-                    <pre style="color: red;">
+                    <pre class="assertion-error">
 java.lang.AssertionError:
 Expected: a collection with size <1>
      but: collection size was <2>
@@ -600,7 +611,7 @@ Expected: a collection with size <1>
                     <pre><code data-trim class="language-java">
 assertThat("Test content", allOf(startsWith("Test"), not(endsWith("content"))));
                     </code></pre>
-                    <pre style="color: red;">
+                    <pre class="assertion-error">
 java.lang.AssertionError:
 Expected: (a string starting with "Test" and not a string ending with "content")
      but: not a string ending with "content" was "Test content"
@@ -613,7 +624,7 @@ Set&lt;Product&gt; products = Sets.newHashSet(wallet, monitor);
 assertThat(products, Matchers.&lt;Product&gt;hasItem(
     hasProperty("name", equalTo("Trombone"))));
                     </code></pre>
-                    <pre style="color: red;">
+                    <pre class="assertion-error">
 java.lang.AssertionError:
 Expected: a collection containing hasProperty("name", "Trombone")
      but: property "name" was "Monitor", property "name" was "Wallet"
