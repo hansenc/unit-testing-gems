@@ -56,9 +56,8 @@
 				<section>
 					<h2>Nicolas Capdevila</h2>
                     <ul>
-                      <li>Roles: Dev Lead, Software Developer, Principal Dev, Architect</li>
-                      <li>Pair-programmed during all those projects, Created bob-the-builder eclipse plugin</li>
-                      <li>Written many tests, some large financial project have over 80% code coverage</li>
+                      <li>Worked on large financial systems with over 80% code coverage</li>
+                      <li>No pennies leakage!</li>
                     </ul>
 				</section>
 
@@ -66,12 +65,12 @@
                     <h2>Agenda</h2>
                     <ul>
                       <li>Realization</li>
+                      <li>Smells</li>
                       <li>Guidelines</li>
-                      <li>Unit tests smells</li>
+                      <li>Benefits</li>
                       <li>JUnit gems</li>
                       <li>Mockito gems</li>
-                      <li>AssertJ gems</li>
-                      <li>Miscellanea</li>
+                      <li>Assertion gems</li>
                       <li>References</li>
                       <li>Q&A</li>
                     </ul>
@@ -80,54 +79,157 @@
                 <section>
                     <h2>Realization</h2>
                     <ul>
-                      <li>Technical Challenges
-                        <ul>
-                          <li class="fragment">Designing unit tests is hard</li>
-                          <li class="fragment">There is an implicit repetition with somewhat small variations. Lends itself to code duplication/copy-paste</li>
-                          <li class="fragment">Cross boundaries (eg. mix persistence + business logic)</li>
-                          <li class="fragment">One simple production change causes a bunch of fixtures to fail in multiple test files.</li>
-                        </ul>
-                      </li>
-                      <li>Cultural Challenges
-                        <ul>
-                          <li class="fragment">Perception of a burden. Tendency to leave it until later</li>
-                          <li class="fragment">2nd class citizen. It's not as important as production code</li>
-                        </ul>
-                      </li>
-                      <li>Fallacies
-                        <ul>
-                          <li class="fragment">Fallacy of the Omnipotent QA. "Nah, QA will catch this" </li>
-                          <li class="fragment">Fallacy of the Tortoise and the Hare. "Unit testing slows me down"</li>
-                          <li class="fragment">Fallacy of perceived simplicity ie. "this class is simple, not writing a test now". Logic will eventually become complex</li>
-                        </ul>
-                      </li>
+                      <li>Technical challenges</li>
+                      <li>Cultural challenges</li>
                     </ul>
                 </section>
                 <section>
-                      <h2>Guidelines</h2>
-                      <ul>
-                        <li class="fragment">Conform with the same standards than production code</li>
-                        <li class="fragment">Needs to be legible. Code is read many more times than is written. Leave good impression behind</li>
-                        <li class="fragment">Sharp focus. Before you start, ask yourself this simple question "What am I testing?"</li>
-                        <li class="fragment">Strive for near-100% coverage and meaningful assertions</li>
-                        <li class="fragment">Self documenting tests</li>
-                        <li class="fragment">Need care and maintenance. Unit test code refactoring should follow a production code refactoring</li>
-                        <li class="fragment">Fast. Is slow test an integration test?</li>
-                        <li class="fragment">Design your test for extensibility</li>
-                        <li class="fragment">Experiment a little, without compromising the above. Use dynamic language</li>
-                      </ul>
+                    <h2>Realization</h2>
+                    <h3>Technical challenges</h3>
+                    <p>Designing unit tests is <strong>hard</strong></p>
                 </section>
                 <section>
-                      <h2>Unit test smells</h2>
-                      <ul>
-                        <li class="fragment">"Magic number syndrome". Ever found some numbers/values that appear out of nowhere and if you change them, things break?</li>
-                        <li class="fragment">Erratic Test (Sometimes passes, sometimes fails)</li>
-                        <li class="fragment">Frequent Debugging</li>
-                        <li class="fragment">Slow Tests</li>
-                        <li class="fragment">Obscure Test</li>
-                        <li class="fragment">Conditional Test Logic</li>
-                        <li class="fragment">Test Code Duplication</li>
-                      </ul>
+                    <h2>Realization</h2>
+                    <h3>Technical challenges</h3>
+                    <p>It's so easy to <strong>duplicate/copy-paste code</strong></p>
+                </section>
+                <section>
+                    <h2>Realization</h2>
+                    <h3>Technical challenges</h3>
+                    <p>Easy to <strong>cross</strong> boundaries (eg. mix persistence + business logic)</p>
+                </section>
+                <section>
+                    <h2>Realization</h2>
+                    <h3>Cultural challenges</h3>
+                    <p>It's a <strong>burden</strong>. Leave it for <strong>later</strong></p>
+                </section>
+                <section>
+                    <h2>Realization</h2>
+                    <h3>Cultural challenges</h3>
+                    <p><strong>2nd class</strong> citizen. Not as important as production code</p>
+                </section>
+                <section>
+                    <h2>Realization</h2>
+                    <h3>Cultural challenges</h3>
+                    <p>"Nah, QA will catch this" </p>
+                </section>
+                <section>
+                    <h2>Realization</h2>
+                    <h3>Cultural challenges</h3>
+                    <p>"Unit testing slows me down"</p>
+                </section>
+                <section>
+                    <h2>Realization</h2>
+                    <h3>Cultural challenges</h3>
+                    <p>"This class is simple, not writing a test now"</p>
+                </section>
+                <section>
+                    <h2>Smells</h2>
+                    <p>Magic numbers</p>
+                </section>
+                <section>
+                    <h2>Smells</h2>
+                    <p>Erratic failures</p>
+                </section>
+                <section>
+                    <h2>Smells</h2>
+                    <p>Frequent Debugging</p>
+                </section>
+                <section>
+                    <h2>Smells</h2>
+                    <p>Slowness</p>
+                </section>
+                <section>
+                    <h2>Smells</h2>
+                    <p>Complex</p>
+                </section>
+                <section>
+                    <h2>Smells</h2>
+                    <p>Code duplication, repetition</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Same standards as production</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Readable. Code is read many more times than is written. Leave good impression behind</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Sharp focus: "What am I testing?"</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Strive for 100% coverage and meaningful assertions</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Self documenting</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Need care and love. Refactoring also applies</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Fast</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Design your test for extensibility</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Use code coverage tools in your IDE and maven build</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Use pair-programming or code reviews</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>TDD</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Sonar</p>
+                </section>
+                <section>
+                    <h2>Guidelines</h2>
+                    <p>Have fun! Experiment without compromising the above... Dynamic language? Parallel execution?</p>
+                </section>
+                <section>
+                    <h2>Benefits</h2>
+                    <p>Better sleeping patterns</p>
+                </section>
+                <section>
+                    <h2>Benefits</h2>
+                    <p>Less bugs in production, more features/projects, better business</p>
+                </section>
+                <section>
+                    <h2>Benefits</h2>
+                    <p>Earn respect from coworkers, users</p>
+                </section>
+                <section>
+                    <h2>Benefits</h2>
+                    <p>Refactorings made easier</p>
+                </section>
+                <section>
+                    <h2>Benefits</h2>
+                    <p>Pinpoint tech debt</p>
+                </section>
+                <section>
+                    <h2>Benefits</h2>
+                    <p>Explore technologies</p>
+                </section>
+                <section>
+                    <h2>Benefits</h2>
+                    <p>More employable. Big tech shops and luminaries get it!</p>
+                </section>
+                <section>
+                    <h2>Benefits</h2>
+                    <p>It's fun</p>
                 </section>
                 <section>
                   <h2>JUnit gems</h2>
@@ -334,7 +436,6 @@ public class IsMetalTest {
   }
 					</code></pre>
                 </section>
-            <section>
                 <section>
                 <img src="images/mockito_logo.jpg" alt="Mockito">
                   <ul>
@@ -350,6 +451,24 @@ public class IsMetalTest {
                   <h2>@Captor</h2>
                   <p>Inspect <strong>side effects</strong>, eg. PerformanceTrackerTest</p>
 					<pre><code data-trim>
+  public Event track(TrackRequest trackRequest)
+  {
+      // NETWORK CALL
+      Medal medal = medalFetcher.getMedal(trackRequest.getCompetitionEvent());
+      Event event = new Event.Builder()
+              .withCompetitionEvent(trackRequest.getCompetitionEvent())
+              .withCompetitors(trackRequest.getCompetitors())
+              .withDate(new Date())
+              .withMedal(medal)
+              .withMyCondition(trackRequest.getMe())
+              .build();
+      EventAudit eventAudit = mapper.map(event);
+      // NETWORK CALLS
+      eventLogger.save(event);
+      eventLogger.save(eventAudit);
+      return event;
+  }
+...
   @Captor
   private ArgumentCaptor&lt;Event&gt; eventCaptor;
 ...
@@ -440,7 +559,7 @@ public interface PerformanceTracker
 {
     Event track(TrackRequest trackRequest);
 
-    Collection&lt;Event&gt; track(Collection&lt;TrackRequest&gt; trackRequests);
+    Collection<Event> track(Collection<TrackRequest> trackRequests);
 }
 ...
     @Override
@@ -504,20 +623,6 @@ public interface PerformanceTracker
  }
 					</code></pre>
                 </section>
-                </section>
-
-                <section>
-                  <h2>Miscellanea</h2>
-                  <ul>
-                    <li>Use code coverage tools in your IDE or maven plugins</li>
-                    <li>Use pair-programming or code reviews</li>
-                    <li>TDD</li>
-                    <li>Register your build in Sonar!</li>
-                    <li>Unit testing can give you quite a challenge</li>
-                    <li>Multi-threading programming poses quite a challenge</li>
-                    <li>Run your tests in parallel!</li>
-                  </ul>
-                </section>
 
                 <section>
                   <h1>References</h1>
@@ -530,9 +635,6 @@ public interface PerformanceTracker
                     <li><a href="http://joel-costigliola.github.io/assertj/" target="_blank">AssertJ</a></li>
                     <li><a href="http://behaviour-driven.org/" target="_blank">BDD (Behavior Driven Development)</a></li>
                     <li><a href="https://github.com/ncapdevila/unit-testing-gems" target="_blank">Code Samples</a></li>
-
-                    <!-- add code coverage tools, TDD links -->
-
                   </ul>
                 </section>
                 <section>
