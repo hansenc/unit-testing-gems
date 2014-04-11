@@ -3,3 +3,5 @@ whateverFolder
 .project
 .settings
 /target
+.idea
+*.iml
