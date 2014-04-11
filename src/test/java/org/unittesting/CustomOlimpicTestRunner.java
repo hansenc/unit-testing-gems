@@ -29,11 +29,6 @@ public class CustomOlimpicTestRunner extends BlockJUnit4ClassRunner {
     return super.withBeforeClasses(statement);
   }
 
-  @Override
-  protected Statement withAfterClasses(Statement statement) {
-    return super.withAfterClasses(statement);
-  }
-
   private void initializeConfig() {
     // TODO Auto-generated method stub
 

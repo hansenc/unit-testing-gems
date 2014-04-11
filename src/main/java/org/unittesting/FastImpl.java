@@ -79,14 +79,13 @@ public class FastImpl implements PerformanceTracker
         public Event call() throws Exception
         {
             Medal medal = medalFetcher.getMedal(trackRequest.getCompetitionEvent());
-            Event event = new Event.Builder()
+            return new Event.Builder()
                     .withCompetitionEvent(trackRequest.getCompetitionEvent())
                     .withCompetitors(trackRequest.getCompetitors())
                     .withDate(new Date())
                     .withMedal(medal)
                     .withMyCondition(trackRequest.getMe())
                     .build();
-            return event;
         }
     }
 

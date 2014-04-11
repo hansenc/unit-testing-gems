@@ -4,26 +4,23 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import junit.framework.Assert;
-
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import junit.framework.Assert;
+
 public class ReportWriter extends TestWatcher {
 
   private final EventLoggerTest eventLoggerTest;
-  
-  private final File file;
 
-  private FileWriter fileWriter;
+    private FileWriter fileWriter;
   
   public ReportWriter(EventLoggerTest eventLoggerTest, File file) {
     Assert.assertNotNull(eventLoggerTest);
     Assert.assertNotNull(file);
     this.eventLoggerTest = eventLoggerTest;
-    this.file = file;
-    try {
+      try {
       fileWriter = new FileWriter(file);
     }
     catch (IOException e) {

@@ -43,8 +43,6 @@ public class FastPerformanceTracker_V2_Test
     @Captor
     private ArgumentCaptor<Event> eventCaptor;
 
-    private CountDownLatch countDownLatch;
-
     @Mock
     private SlowImpl slowImpl;
     
@@ -105,7 +103,7 @@ public class FastPerformanceTracker_V2_Test
         // GIVEN
         int size = 100;
         Collection<TrackRequest> requestCollection = createRequestCollection(size);
-        countDownLatch = new CountDownLatch(200);
+        CountDownLatch countDownLatch = new CountDownLatch(200);
         instrumentedEventLogger = new InstrumentedEventLogger(countDownLatch, eventLogger);
         underTest = new FastImpl(medalFetcher, instrumentedEventLogger, mapper);
         // WHEN

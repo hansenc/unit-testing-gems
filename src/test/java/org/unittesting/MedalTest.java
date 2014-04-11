@@ -13,7 +13,7 @@ public class MedalTest {
   @Test
   public void testMetal() {
     for (Medal each : Medal.values()) {
-      boolean expected = each.ordinal() < 3 ? true:false;
+      boolean expected = each.ordinal() < 3;
       assertEquals(expected, each.isMetal());
     }
   }
