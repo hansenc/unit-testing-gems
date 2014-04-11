@@ -143,7 +143,7 @@
                       <p>Use it for <strong>static-i</strong> stuff</p>
                       <p>instead of extending an overly complex BaseDbTestCase, BaseTestCase, ... </p>
                       <p>eg. CustomOlimpicTestRunner</p>
-                      <pre><code data-trim>
+                      <pre><code data-trim class="language-java">
 public class CustomOlimpicTestRunner extends BlockJUnit4ClassRunner {
 
   Logger LOGGER = Logger.getLogger(CustomOlimpicTestRunner.class);
@@ -190,7 +190,7 @@ public class CustomOlimpicTestRunner extends BlockJUnit4ClassRunner {
                   <p>1st draft: OlimpicsBusinessLogicTest</p>
                   <p>Improved: OlimpicsBusinessLogicImprovedTest</p>
                   <p>Better: ParameterizedOlimpicsBusinessLogicTest</p>
-                      <pre><code data-trim>
+                      <pre><code data-trim class="language-java">
   @Test
   public void testWinGoldTightRace() {
     // GIVEN
@@ -268,7 +268,7 @@ public class CustomOlimpicTestRunner extends BlockJUnit4ClassRunner {
                     <h2>@Rule and Timeout</h2>
                     <p><strong>Empower</strong> your test: take action when your test fails or pass or runs. eg. create reports, alerts</p>
                     <p>Example: EventLoggerTest</p>
-                    <pre><code data-trim>
+                    <pre><code data-trim class="language-java">
   @Rule
   public ReportCreator reportCreator = new ReportCreator();
   
@@ -304,7 +304,7 @@ public class CustomOlimpicTestRunner extends BlockJUnit4ClassRunner {
                 <section>
                     <h2>@RunWith(Theories.class), @Theory, @Datapoints, Assume</h2>
                     <p>Let junit do the typing</p>
-                    <pre><code data-trim>
+                    <pre><code data-trim class="language-java">
 @RunWith(Theories.class)
 public class IsMetalTest {
 
@@ -349,28 +349,14 @@ public class IsMetalTest {
                 <section>
                   <h2>@Captor</h2>
                   <p>Inspect <strong>side effects</strong>, eg. PerformanceTrackerTest</p>
-					<pre><code data-trim>
+					<pre><code data-trim class="language-java" class="language-java">
+public class PerformanceTrackerTest {
   @Captor
   private ArgumentCaptor&lt;Event&gt; eventCaptor;
-...
+//...
   @Test
   public void testBDD() throws Exception {
-    TrainingEffort me = MEDIUM;
-    Collection&lt;TrainingEffort&gt; competitors = mock(Collection.class);
-    CompetitionEvent competitionEvent = mock(CompetitionEvent.class);
-    Medal medal = Medal.BRONZE;
-    EventAudit eventAudit = mock(EventAudit.class);
-    // GIVEN
-    given(medalFetcher.getMedal(competitionEvent)).willReturn(medal);
-    given(mapper.map(any(Event.class))).willReturn(eventAudit);
-    TrackRequest request = new TrackRequest.Builder()
-        .withCompetitionEvent(competitionEvent)
-        .withCompetitors(competitors)
-        .withMe(me)
-        .build();
-    // WHEN
-    Event actual = underTest.track(request);
-    // THEN
+    //...
     verify(eventLogger).save(eventCaptor.capture());
     Event actualEvent = eventCaptor.getValue();
     assertEquals(medal, actualEvent.getMedal());
@@ -379,42 +365,16 @@ public class IsMetalTest {
     assertEquals(competitors, actual.getCompetitors());
     assertEquals(medal, actual.getMedal());
   }
-...
+//...
+}
 					</code></pre>
                 </section>
                 <section>
                   <h2>Answer</h2>
                   <p><strong>Introspect on the method</strong> calls of your mocks. eg. MapperTest</p>
-					<pre><code data-trim>
-  public EventAudit map(Event event) {
-    return new EventAudit.Builder()
-        .withCompetitionEvent(event.getCompetitionEvent())
-        .withCompetitors(event.getCompetitors())
-        .withDate(event.getDate())
-        .withMedal(event.getMedal())
-        .withMyCondition(event.getMyCondition())
-        .build();
-  }
-
-
-  @Test
-  public void testAllEventMethodsInvokedInMapper() throws Exception {
-    EventAnswer answer = new EventAnswer();
-    Event mock = Mockito.mock(Event.class, answer);
-    try {
-      mapper.map(mock);
-    }
-    catch (Exception e) {
-      //We don't care about any exceptions thrown from builder, just that buildLineItem invokes all getters 
-    }
-    finally {
-      assertFalse("Missing getter invocation: " + answer.getMissingGetInvocations(), answer.isMissingGetInvocations());
-    }
-  }
-
-
+					<pre><code data-trim class="language-java">
 public class EventAnswer implements Answer&lt;Event&gt;{
-...
+//...
   @Override
   public Event answer(InvocationOnMock invocation) throws Throwable {
     Method method = invocation.getMethod();
@@ -423,56 +383,30 @@ public class EventAnswer implements Answer&lt;Event&gt;{
     }
     return null /*don't care about returning anything, just that all getters are invoked*/;
   }
-...
+//...
   public boolean isMissingGetInvocations() {
     return !getMissingGetInvocations().isEmpty();
   }
-...
+//...
 }
 					</code></pre>
                 </section>
 
                 <section>
                    <h2>@Spy</h2>
-                   <p>Mock parts of your unit under test. Use with caution. eg. SlowPerformanceTrackerSpyTest</p>
-					<pre><code data-trim>
-public interface PerformanceTracker
-{
-    Event track(TrackRequest trackRequest);
-
-    Collection&lt;Event&gt; track(Collection&lt;TrackRequest&gt; trackRequests);
-}
-...
-    @Override
-    public Collection&lt;Event&gt; track(Collection&lt;TrackRequest&gt; trackRequests)
-    {
-        ImmutableList.Builder&lt;Event&gt; listBuilder = new ImmutableList.Builder&lt;Event&gt;();
-        for(TrackRequest each : trackRequests)
-        {
-            Event event = track(each);
-            listBuilder.add(event);
-        }
-        return listBuilder.build();
-    }
-...
+                   <p>Mock parts of your unit under test. Use with caution.</p>
+					<pre><code data-trim class="language-java">
+public class SlowPerformanceTrackerSpyTest {
+//...
   @Before
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    underTest = new SlowImpl(medalFetcher, eventLogger, mapper);
-    //SPY
+    //...
     underTest = spy(underTest);
   }
-...
+//...
   @Test
   public void testWithSpy() {
-    // GIVEN
-    TrackRequest request3 = mock(TrackRequest.class);
-    TrackRequest request2 = mock(TrackRequest.class);
-    TrackRequest request1 = mock(TrackRequest.class);
-    Event event1 = mock(Event.class);
-    Event event2 = mock(Event.class);
-    Event event3 = mock(Event.class);
-    Collection&lt;TrackRequest&gt; requests = Lists.newArrayList(request1, request2, request3);
+    //...
     doReturn(event1).when(underTest).track(request1);
     doReturn(event2).when(underTest).track(request2);
     doReturn(event3).when(underTest).track(request3);
@@ -480,17 +414,33 @@ public interface PerformanceTracker
     Collection&lt;Event&gt; actual = underTest.track(requests);
     // THEN
     assertEquals(3, actual.size());
-    assertTrue(actual.contains(event1));
-    assertTrue(actual.contains(event2));
-    assertTrue(actual.contains(event3));
   }
 
 					</code></pre>
                 </section>
                 <section>
+                    <h2>Mockito boilerplate</h2>
+					<pre><code data-trim class="language-java">
+public class ExampleTest {
+    @Mock
+    private List list;
+
+    @Test
+    public void shouldDoSomething() {
+        list.add(100);
+    }
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+}
+                    </code></pre>
+                </section>
+                <section>
                   <h2>MockitoJUnitRunner</h2>
                   <p>You decide!</p>
-					<pre><code data-trim>
+					<pre><code data-trim class="language-java">
  @RunWith(MockitoJUnitRunner.class)
  public class ExampleTest {
  
@@ -504,7 +454,7 @@ public interface PerformanceTracker
  }
 					</code></pre>
                 </section>
-                </section>
+            </section>
 
                 <section>
                   <h2>Miscellanea</h2>
