@@ -555,7 +555,148 @@ public class ExampleTest {
  }
 					</code></pre>
                 </section>
+            </section>
+                <section>
+                    <h1>Fluent assertions</h1>
+                    <ul>
+                        <li>A test is only as effective as its assertions.</li>
+                        <li>assertTrue(boolean) and assertFalse(boolean) considered harmful!
+                            <ul>
+                                <li>Multiple conditions with && or || can be difficult to read</li>
+                                <li>Expected true, but was: false
+                                    <ul style="list-style: none">
+                                        <li><img src="images/pc_load_letter.jpeg"></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </section>
+            <section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <p><img src="images/hamcrest_logo.jpg"></p>
+                    <ul>
+                        <li>A library of matcher objects.
+                            <ul><li>Also known as constraints or predicates.</li></ul>
+                        </li>
+                        <li>Not a testing library: it just happens that matchers are very useful for testing.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <pre><code data-trim class="language-java">
+Set&lt;Product&gt; products = Sets.newHashSet(wallet, monitor);
+assertThat(products, hasSize(1));
+                    </code></pre>
+                    <pre style="color: red;">
+java.lang.AssertionError:
+Expected: a collection with size <1>
+     but: collection size was <2>
+                    </pre>
+                </section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <pre><code data-trim class="language-java">
+assertThat("Test content", allOf(startsWith("Test"), not(endsWith("content"))));
+                    </code></pre>
+                    <pre style="color: red;">
+java.lang.AssertionError:
+Expected: (a string starting with "Test" and not a string ending with "content")
+     but: not a string ending with "content" was "Test content"
+                    </pre>
+                </section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <pre><code data-trim class="language-java">
+Set&lt;Product&gt; products = Sets.newHashSet(wallet, monitor);
+assertThat(products, Matchers.&lt;Product&gt;hasItem(
+    hasProperty("name", equalTo("Trombone"))));
+                    </code></pre>
+                    <pre style="color: red;">
+java.lang.AssertionError:
+Expected: a collection containing hasProperty("name", "Trombone")
+     but: property "name" was "Monitor", property "name" was "Wallet"
+                    </pre>
+                </section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <h3>General matchers</h3>
+                    <pre><code data-trim class="language-java">
+allOf(first, second, ...)
+anyOf(first, second, ...)
+both(...).and(...)
+either(...).or(...)
+equalTo(...)
+not(...)
+nullValue()
+anything()
+any(Class&lt;...&gt;)
+instanceOf(Class&lt;...&gt;)
+samePropertyValuesAs(...)
+                    </code></pre>
+                </section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <h3>String matchers</h3>
+                    <pre><code data-trim class="language-java">
+containsString(...)
+startsWith(...)
+endsWith(...)
+equalToIgnoringCase(...)
+equalToIgnoringWhiteSpace(...)
+isEmptyString()
+isEmptyOrNullString()
+hasToString(...)
+                    </code></pre>
+                </section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <h3>Numeric matchers</h3>
+                    <pre><code data-trim class="language-java">
+greaterThan(...)
+greaterThanOrEqualTo(...)
+lessThan(...)
+lessThanOrEqualTo(...)
+closeTo(..., delta)
+                    </code></pre>
+                </section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <h3>Collection / Iterable</h3>
+                    <pre><code data-trim class="language-java">
+everyItem(...)
+hasItem(...)
+hasItems(...)
+hasSize(...)
+                    </code></pre>
+                </section>
+                <section>
+                    <h1>Hamcrest</h1>
+                    <h3>Pro tip</h3>
+                    <ul style="list-style: none">
+                        <li>
+                            <h4>Eclipse</h4>
+                            Add <span style="font-family: 'Courier New'">org.hamcrest.Matchers</span> to your
+                            “favorites” for completion of static imports.
+                        </li>
+                        <li>&nbsp;</li>
+                        <li><h4>IntelliJ IDEA</h4>
+                            Static method completion:
+                            <ul>
+                                <li>Ctrl Opt Space on Mac.</li>
+                                <li>Ctrl Alt Space elsewhere.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h1>AssertJ</h1>
+                    <p>Fluent assertions for Java</p>
+                </section>
+            </section>
 
                 <section>
                   <h1>References</h1>
