@@ -32,11 +32,6 @@
 
         <style>
             .assertion-error {
-                border: 1px solid;
-                margin: 10px 0px;
-                padding:15px 10px;
-                background-repeat: no-repeat;
-                background-position: 10px center;
                 color: #D8000C; /* red */
             }
         </style>
@@ -705,7 +700,59 @@ hasSize(...)
             <section>
                 <section>
                     <h1>AssertJ</h1>
-                    <p>Fluent assertions for Java</p>
+                    <ul>
+                        <li>Fluent assertions for Java.</li>
+                        <li>A fork of FEST 2 (which never made it past milestone).</li>
+                    </ul>
+                </section>
+                <section>
+                    <h1>AssertJ</h1>
+                    <pre><code data-trim class="language-java">
+Set&lt;Product&gt; products = Sets.newHashSet(wallet, monitor);
+assertThat(products).hasSize(1);
+                    </code></pre>
+                    <pre class="assertion-error">
+java.lang.AssertionError:
+Expected size:<1> but was:<2> in:
+<[Product{id=2, name='Wallet'}, Product{id=1, name='Monitor'}]>
+                    </pre>
+                </section>
+                <section>
+                    <h1>AssertJ</h1>
+                    <pre><code data-trim class="language-java">
+assertThat("Test string").startsWith("Test").doesNotHave(suffix("string"));
+...
+private Condition&lt;? super String&gt; suffix(final String suffix)
+{
+    return new Condition&lt;String&gt;("suffix \"" + suffix + "\"")
+    {
+        @Override
+        public boolean matches(String value)
+        {
+            return value.endsWith(suffix);
+        }
+    };
+}
+                    </code></pre>
+                    <pre class="assertion-error">
+java.lang.AssertionError:
+Expecting:
+ <"Test string">
+not to have:
+ &lt;suffix "string"&gt;
+                    </pre>
+                </section>
+                <section>
+                    <h1>AssertJ</h1>
+                    <pre><code data-trim class="language-java">
+Set&lt;Product&gt; products = Sets.newHashSet(wallet, monitor);
+assertThat(products).extracting("name").isEqualTo("Trombone");
+                    </code></pre>
+                    <pre class="assertion-error">
+org.junit.ComparisonFailure:
+Expected :"Trombone"
+Actual   :["Monitor", "Wallet"]
+                    </pre>
                 </section>
             </section>
 
